@@ -5,22 +5,30 @@
 ** Login   <rahmeh_d@epitech.net>
 ** 
 ** Started on  Tue Feb  9 17:40:08 2016 Rahmeh Daniel
-** Last update Tue Feb  9 17:42:19 2016 Rahmeh Daniel
+** Last update Tue Feb 16 16:10:36 2016 Rahmeh Daniel
 */
 
 int            read_file_buff(char *path)
 {
-  char          buffer[500]; /*for exemple*/
-  FILE          *file;
-  size_t        nbread;
+  int           fd;
+  char          *buffer;
+  int           line_number;
+  struct stat   s;
+  int		k;
 
-  file = fopen(path, "r");
-  if (file)
-    {
-      while ((nbread = fread(buffer, 1, sizeof buffer, file)) > 0)
-        fwrite(buffer, 1, nbread, stdout);
-    }
-  fclose(file);
+  if (stat(map_path, &s) == -1)
+    return (NULL);
+  k = s.st_size;
+  line_number = 0;
+  if ((buffer = malloc(k * sizeof(char))) == NULL)
+    exit(1);
+  fd = open(file, O_RDONLY);
+  if(fd == -1)
+    exit(1);
+  while (read(fd, buffer, 1024))
+    my_putstr_plus(buffer);
+  close(fd);
+  return (0);
 }
 
 int     main(int ac, char **av)
